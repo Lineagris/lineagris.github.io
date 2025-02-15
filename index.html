@@ -1,23 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Calculators</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.css">
     <style>
+        /* Estilos CSS copiados del ejemplo de GitHub, con algunas modificaciones */
         body {
-            font-family: monospace; /* Retro font */
-            background-color: #1e1e1e; /* Dark background */
-            color: #a0a0a0; /* Light text color */
-            display: flex;
-            margin: 0; /* Remove default margins */
+            background: #f0f0f0;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 16px;
+            color: #333;
+            line-height: 1.4;
+            margin: 0;
+            padding: 20px;
+            display: flex; /* Para el menú lateral */
         }
 
         nav {
-            width: 200px; /* Fixed width for the menu */
-            background-color: #333; /* Darker menu background */
+            width: 200px; /* Ancho fijo para el menú */
+            background-color: #333; /* Fondo oscuro para el menú */
             padding: 20px;
-            position: fixed; /* Keep menu in place */
+            position: fixed; /* Menú fijo */
             left: 0;
             top: 0;
             height: 100%;
@@ -38,11 +44,12 @@
         nav a:hover {
             color: #fff;
         }
+
         .dropdown-content {
             display: none;
-            background-color: #444; /* Slightly lighter background for dropdown */
+            background-color: #444; /* Fondo un poco más claro para el menú desplegable */
             min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
             z-index: 1;
         }
 
@@ -53,67 +60,29 @@
             display: block;
         }
 
-        .dropdown-content a:hover {background-color: #555;}
+        .dropdown-content a:hover {
+            background-color: #555;
+        }
 
         .dropdown:hover .dropdown-content {
             display: block;
         }
 
         .content {
-            flex: 1; /* Take up remaining space */
+            flex: 1; /* El contenido ocupa el espacio restante */
             padding: 20px;
-            margin-left: 220px; /* Adjust margin for the fixed menu */
-            text-align: center; /* Center the title */
-        }
-
-        #sudoku-board {
-            display: grid;
-            grid-template-columns: repeat(9, 1fr);
-            gap: 2px;
-            margin: 20px auto; /* Center the board */
-            border: 2px solid #a0a0a0;
-        }
-
-        #sudoku-board div {
-            width: 30px;
-            height: 30px;
-            background-color: #444;
-            color: #a0a0a0;
-            border: 1px solid #666; /* Slightly darker border */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-        }
-        #sudoku-board input{
-            width: 30px;
-            height: 30px;
-            background-color: #444;
-            color: #a0a0a0;
-            border: 1px solid #666; /* Slightly darker border */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            text-align: center;
-            appearance: none; /* remove default input styling */
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            border: none;
-            background: transparent;
-            outline: none;
-        }
-        #sudoku-board input:focus{
-            background-color: #555;
+            margin-left: 220px; /* Ajuste para el menú fijo */
+            text-align: center; /* Centrar el título */
         }
 
         h1 {
-            color: #fff;
+            font-size: 2em;
+            margin-bottom: 20px;
         }
     </style>
 </head>
-<body>
 
+<body>
     <nav>
         <ul>
             <li><a href="index.html">Home</a></li>
@@ -135,63 +104,6 @@
     <div class="content">
         <h1>All Calculators</h1>
     </div>
-
-    <script>
-        // JavaScript for page navigation (optional, can be done with regular links)
-        const links = document.querySelectorAll('nav a');
-        links.forEach(link => {
-            link.addEventListener('click', (event) => {
-                // Prevent default link behavior if you want to handle navigation with JS
-                // event.preventDefault(); 
-
-                // Get the target page from the link's href
-                const targetPage = link.getAttribute('href');
-
-                // Load content dynamically (example using fetch API)
-                if (targetPage !== "index.html"){
-                    fetch(targetPage)
-                        .then(response => response.text())
-                        .then(html => {
-                            document.querySelector('.content').innerHTML = html;
-                            if (targetPage === "sudoku1.html") {
-                                loadSudoku();
-                            }
-                        });
-                } else {
-                    document.querySelector('.content').innerHTML = "<h1>All Calculators</h1>";
-                }
-            });
-        });
-
-        function loadSudoku() {
-            const script = document.createElement('script');
-            script.src = 'sudoku.js';
-            script.onload = () => {
-                // Wait for the script to load before using sudoku
-                const board = sudoku.generate("easy");
-                const grid = sudoku.board_string_to_grid(board);
-                const boardDiv = document.createElement('div');
-                boardDiv.id = "sudoku-board";
-
-                grid.forEach(row => {
-                    row.forEach(cell => {
-                        const cellDiv = document.createElement('div');
-                        if (cell !== "."){
-                            cellDiv.textContent = cell;
-                        } else {
-                            const input = document.createElement("input");
-                            input.maxLength = "1";
-                            cellDiv.appendChild(input);
-                        }
-                        boardDiv.appendChild(cellDiv);
-                    });
-                });
-                document.querySelector('.content').appendChild(boardDiv);
-                
-            };
-            document.head.appendChild(script);
-        }
-    </script>
-
 </body>
+
 </html>
