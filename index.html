@@ -1,150 +1,197 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Calculator</title>
-    <script src="sudoku.js"></script>
+    <title>All Calculators</title>
     <style>
         body {
+            font-family: monospace; /* Retro font */
+            background-color: #1e1e1e; /* Dark background */
+            color: #a0a0a0; /* Light text color */
             display: flex;
-            font-family: 'Courier New', monospace;
-            background-color: #1a1a2e;
-            color: #e0e0e0;
-            margin: 0;
+            margin: 0; /* Remove default margins */
         }
-        #menu {
-            width: 250px;
-            background: linear-gradient(45deg, #ff00ff, #00ffff);
+
+        nav {
+            width: 200px; /* Fixed width for the menu */
+            background-color: #333; /* Darker menu background */
             padding: 20px;
-            box-shadow: 3px 0px 10px rgba(255, 0, 255, 0.5);
+            position: fixed; /* Keep menu in place */
+            left: 0;
+            top: 0;
+            height: 100%;
         }
-        .menu-item {
-            cursor: pointer;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.3);
-            margin: 5px 0;
-            transition: 0.3s;
+
+        nav ul {
+            list-style: none;
+            padding: 0;
         }
-        .menu-item:hover {
-            background: rgba(255, 255, 255, 0.3);
+
+        nav a {
+            text-decoration: none;
+            color: #a0a0a0;
+            display: block;
+            padding: 5px 0;
         }
-        .submenu {
+
+        nav a:hover {
+            color: #fff;
+        }
+        .dropdown-content {
             display: none;
-            padding-left: 15px;
+            background-color: #444; /* Slightly lighter background for dropdown */
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
         }
-        #content {
-            flex-grow: 1;
-            text-align: center;
-            padding: 50px;
+
+        .dropdown-content a {
+            color: white;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
         }
-        h1 {
-            font-size: 3em;
-            text-shadow: 0px 0px 10px cyan;
+
+        .dropdown-content a:hover {background-color: #555;}
+
+        .dropdown:hover .dropdown-content {
+            display: block;
         }
-        .sudoku-container {
+
+        .content {
+            flex: 1; /* Take up remaining space */
+            padding: 20px;
+            margin-left: 220px; /* Adjust margin for the fixed menu */
+            text-align: center; /* Center the title */
+        }
+
+        #sudoku-board {
             display: grid;
-            grid-template-columns: repeat(9, 40px);
+            grid-template-columns: repeat(9, 1fr);
             gap: 2px;
-            margin: 20px auto;
-            width: fit-content;
-            border: 2px solid #fff;
+            margin: 20px auto; /* Center the board */
+            border: 2px solid #a0a0a0;
         }
-        .sudoku-cell {
-            width: 40px;
-            height: 40px;
+
+        #sudoku-board div {
+            width: 30px;
+            height: 30px;
+            background-color: #444;
+            color: #a0a0a0;
+            border: 1px solid #666; /* Slightly darker border */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        #sudoku-board input{
+            width: 30px;
+            height: 30px;
+            background-color: #444;
+            color: #a0a0a0;
+            border: 1px solid #666; /* Slightly darker border */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
             text-align: center;
-            font-size: 20px;
-            border: 1px solid #ccc;
-            background-color: #fff;
-            color: #000;
+            appearance: none; /* remove default input styling */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            border: none;
+            background: transparent;
+            outline: none;
         }
-        .sudoku-cell.incorrect {
-            background-color: red;
+        #sudoku-board input:focus{
+            background-color: #555;
         }
-        .controls {
-            margin: 20px;
-        }
-        button {
-            margin: 5px;
-            padding: 10px;
-            font-size: 16px;
-            cursor: pointer;
+
+        h1 {
+            color: #fff;
         }
     </style>
 </head>
 <body>
-    <div id="menu">
-        <div class="menu-item" onclick="toggleMenu('home')">Home</div>
-        <div class="submenu" id="home">
-            <div class="menu-item" onclick="toggleMenu('sudoku1')">Sudoku</div>
-            <div class="submenu" id="sudoku1">
-                <div class="menu-item" onclick="loadContent('sudoku1')">Sudoku1</div>
-            </div>
-        </div>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li class="dropdown">
+                <a href="#">Games</a>
+                <div class="dropdown-content">
+                    <a href="sudoku1.html">Sudoku</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#">Calculators</a>
+                <div class="dropdown-content">
+                    <a href="calc1.html">Calculator 1</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="content">
+        <h1>All Calculators</h1>
     </div>
-    <div id="content">
-        <h1>All Calculator</h1>
-    </div>
+
     <script>
-        function toggleMenu(id) {
-            let submenu = document.getElementById(id);
-            submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
-        }
-        
-        function loadContent(page) {
-            if (page === 'sudoku1') {
-                document.getElementById('content').innerHTML = `<h2>Sudoku1</h2>
-                    <div class="controls">
-                        <button onclick="generateSudoku('easy')">Nuevo Fácil</button>
-                        <button onclick="generateSudoku('medium')">Nuevo Medio</button>
-                        <button onclick="generateSudoku('hard')">Nuevo Difícil</button>
-                        <button onclick="resetSudoku()">Reiniciar</button>
-                        <button onclick="pauseSudoku()">Pausar</button>
-                    </div>
-                    <div class="sudoku-container" id="sudoku-board"></div>`;
-                generateSudoku('easy');
-            }
-        }
-        
-        function generateSudoku(difficulty) {
-            let board = document.getElementById("sudoku-board");
-            board.innerHTML = '';
-            let puzzle = sudoku.generate(difficulty); // Corregido aquí
-            let grid = sudoku.board_string_to_grid(puzzle);
-            for (let row = 0; row < 9; row++) {
-                for (let col = 0; col < 9; col++) {
-                    let cell = document.createElement("input");
-                    cell.type = "text";
-                    cell.maxLength = 1;
-                    cell.classList.add("sudoku-cell");
-                    if (grid[row][col] !== '.') {
-                        cell.value = grid[row][col];
-                        cell.readOnly = true;
-                    } else {
-                        cell.oninput = function() { validateCell(this, row, col, grid); };
-                    }
-                    board.appendChild(cell);
+        // JavaScript for page navigation (optional, can be done with regular links)
+        const links = document.querySelectorAll('nav a');
+        links.forEach(link => {
+            link.addEventListener('click', (event) => {
+                // Prevent default link behavior if you want to handle navigation with JS
+                // event.preventDefault(); 
+
+                // Get the target page from the link's href
+                const targetPage = link.getAttribute('href');
+
+                // Load content dynamically (example using fetch API)
+                if (targetPage !== "index.html"){
+                    fetch(targetPage)
+                        .then(response => response.text())
+                        .then(html => {
+                            document.querySelector('.content').innerHTML = html;
+                            if (targetPage === "sudoku1.html") {
+                                loadSudoku();
+                            }
+                        });
+                } else {
+                    document.querySelector('.content').innerHTML = "<h1>All Calculators</h1>";
                 }
-            }
-        }
-        
-        function validateCell(cell, row, col, grid) {
-            let value = cell.value;
-            if (!/^[1-9]$/.test(value) || value != grid[row][col]) {
-                cell.classList.add("incorrect");
-            } else {
-                cell.classList.remove("incorrect");
-            }
-        }
-        
-        function resetSudoku() {
-            document.querySelectorAll(".sudoku-cell:not([readonly])").forEach(cell => cell.value = '');
-        }
-        
-        function pauseSudoku() {
-            alert("Juego en pausa");
+            });
+        });
+
+        function loadSudoku() {
+            const script = document.createElement('script');
+            script.src = 'sudoku.js';
+            script.onload = () => {
+                // Wait for the script to load before using sudoku
+                const board = sudoku.generate("easy");
+                const grid = sudoku.board_string_to_grid(board);
+                const boardDiv = document.createElement('div');
+                boardDiv.id = "sudoku-board";
+
+                grid.forEach(row => {
+                    row.forEach(cell => {
+                        const cellDiv = document.createElement('div');
+                        if (cell !== "."){
+                            cellDiv.textContent = cell;
+                        } else {
+                            const input = document.createElement("input");
+                            input.maxLength = "1";
+                            cellDiv.appendChild(input);
+                        }
+                        boardDiv.appendChild(cellDiv);
+                    });
+                });
+                document.querySelector('.content').appendChild(boardDiv);
+                
+            };
+            document.head.appendChild(script);
         }
     </script>
+
 </body>
 </html>
