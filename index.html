@@ -79,6 +79,58 @@
             font-size: 2em;
             margin-bottom: 20px;
         }
+
+        #sudoku-board {
+            width: 360px;
+            height: 360px;
+            border: 3px solid #ccc;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            gap: 0;
+        }
+
+        #sudoku-board div {
+            width: 100%;
+            height: 100%;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: center;
+            line-height: 40px; /* Ajustado para centrar verticalmente */
+        }
+
+        #sudoku-board input {
+            width: 100%;
+            height: 100%;
+            border: none;
+            box-sizing: border-box;
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: center;
+            line-height: 40px; /* Ajustado para centrar verticalmente */
+            background-color: #f8f8f8; /* Color de fondo para celdas vacías */
+        }
+
+        #sudoku-board input:focus {
+            background-color: #fff; /* Color de fondo al enfocar la celda */
+            outline: none;
+        }
+
+        .controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -89,7 +141,7 @@
             <li class="dropdown">
                 <a href="#">Games</a>
                 <div class="dropdown-content">
-                    <a href="sudoku1.html">Sudoku</a>
+                    <a href="#" id="sudoku-link">Sudoku</a>
                 </div>
             </li>
             <li class="dropdown">
@@ -104,6 +156,72 @@
     <div class="content">
         <h1>All Calculators</h1>
     </div>
+
+    <script src="sudoku.js"></script>
+    <script>
+        // Lógica de JavaScript adaptada del ejemplo de GitHub
+        const contentDiv = document.querySelector('.content');
+        const sudokuLink = document.getElementById('sudoku-link');
+
+        sudokuLink.addEventListener('click', () => {
+            contentDiv.innerHTML = `
+                <h1>Sudoku</h1>
+                <div id="sudoku-board"></div>
+                <div class="controls">
+                    <button id="solve-button">Resolver</button>
+                    <button id="reset-button">Reiniciar</button>
+                </div>
+            `;
+
+            const boardDiv = document.getElementById('sudoku-board');
+            const solveButton = document.getElementById('solve-button');
+            const resetButton = document.getElementById('reset-button');
+
+            let board = sudoku.generate('easy');
+            let grid = sudoku.board_string_to_grid(board);
+
+            function createBoard() {
+                boardDiv.innerHTML = ''; // Limpiar el tablero anterior
+
+                grid.forEach(row => {
+                    row.forEach(cell => {
+                        const cellDiv = document.createElement('div');
+                        if (cell !== '.') {
+                            cellDiv.textContent = cell;
+                        } else {
+                            const input = document.createElement('input');
+                            input.maxLength = 1;
+                            input.addEventListener('input', validateInput); // Validar entrada
+                            cellDiv.appendChild(input);
+                        }
+                        boardDiv.appendChild(cellDiv);
+                    });
+                });
+            }
+
+            function validateInput(event) {
+                const input = event.target;
+                const value = input.value;
+
+                // Permitir solo números del 1 al 9
+                if (value !== '' && !/[1-9]/.test(value)) {
+                    input.value = '';
+                }
+            }
+
+            createBoard();
+
+            solveButton.addEventListener('click', () => {
+                // Implementar lógica para resolver el Sudoku
+                alert('Función de resolver Sudoku en construcción.');
+            });
+
+            resetButton.addEventListener('click', () => {
+                // Implementar lógica para reiniciar el tablero
+                alert('Función de reiniciar Sudoku en construcción.');
+            });
+        });
+    </script>
 </body>
 
 </html>
